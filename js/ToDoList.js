@@ -62,3 +62,54 @@ liveToastBtn.addEventListener('click', function () {      // burada önce ekle y
 
 console.log(yenieleman);
 */
+
+// TÜM ELEMENTLERİ SEÇMEK
+
+const input = document.querySelector("#task");
+const ekle = document.querySelector("#liveToastBtn");
+const ul = document.querySelector("#list");
+const ilkDiv = document.querySelector(".header");
+const ikinciDiv = document.querySelector(".container");
+const ngtfUyari = document.querySelector(".toast-body")
+
+runEvents();
+
+function runEvents(){
+    ekle.addEventListener("click",addTodo);
+}
+
+function addTodo(e){
+    const inputText = input.value.trim();
+    if(inputText==null || inputText==""){
+        document.querySelector(".toast-body")
+        alert("Lütfen bir değer giriniz");
+    }else{
+        //Ara yüze ekleme
+        addTodoUI(inputText);
+
+    }
+    
+    //Storage ekleme
+    console.log("Submit eventi calisti");
+    
+}
+
+function addTodoUI(newTodo){
+    const li = document.createElement("li");
+    li.className="list-group-item d-flex justify-content-between";
+    li.textContent = newTodo;
+
+    const a = document.createElement("a");
+    a.href = "#";
+    a.className = "delete-item";
+
+    const i = document.createElement("i");
+    i.className = "fa fa-remove"
+
+    a.appendChild(i);
+    li.appendChild(a);
+    ul.appendChild(li);
+
+    input.value = "";
+
+}
