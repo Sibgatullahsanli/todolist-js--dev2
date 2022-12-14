@@ -70,14 +70,21 @@ const ekle = document.querySelector("#liveToastBtn");
 const ul = document.querySelector("#list");
 const ilkDiv = document.querySelector(".header");
 const ikinciDiv = document.querySelector(".container");
-const ngtfUyari = document.querySelector(".toast-body")
+const pztfUyari = document.querySelectorAll(".toast-body")[0];
+const ngtfUyari = document.querySelectorAll(".toast-body")[1];
+
+//* storage için global bir dizi değişkenini hazırlıyoz
+let todos = [];
+
 
 runEvents();
 
+//todo EKLE tıklanılmasını yakalamak için fonksiyon
 function runEvents(){
     ekle.addEventListener("click",addTodo);
 }
 
+//todo EKLE tıklanılmasında uygulıyacağı fonksiyon
 function addTodo(e){
     const inputText = input.value.trim();
     if(inputText==null || inputText==""){
@@ -86,14 +93,17 @@ function addTodo(e){
     }else{
         //Ara yüze ekleme
         addTodoUI(inputText);
+        //Storage ekleme
+        addTodoToStorage(inputText);
 
     }
     
-    //Storage ekleme
+    
     console.log("Submit eventi calisti");
     
 }
 
+//todo Arayüz eklemesi için fonksiyon
 function addTodoUI(newTodo){
     const li = document.createElement("li");
     li.className="list-group-item d-flex justify-content-between";
@@ -112,4 +122,21 @@ function addTodoUI(newTodo){
 
     input.value = "";
 
+}
+
+//todo LocalStorage eklemesi için fonksiyon
+function addTodoToStorage(newTodo){
+    chekTodoFromStorage();
+    todos.push(newTodo);
+    localStorage.setItem("todos",JSON.stringify(todos));
+}
+
+//todo LocalStorage fonksiyonu için bir key değerinin olup olmadığını kontro eden bi fonksiyon
+//* Bu fonksiyon Array in dolu ve boş olmasının kontrolünü sağlamaktadır
+function chekTodoFromStorage(){
+    if(localStorage.getItem("todos")===null){
+        todos = [];
+    }else{
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
 }
