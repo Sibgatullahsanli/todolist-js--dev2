@@ -68,8 +68,9 @@ console.log(yenieleman);
 const input = document.querySelector("#task");
 const ekle = document.querySelector("#liveToastBtn");
 const ul = document.querySelector("#list");
-const ilkDiv = document.querySelector(".header");
-const ikinciDiv = document.querySelector(".container");
+// const ilkDiv = document.querySelector(".close");
+// const ikinciDiv = document.querySelector(".container");
+const ilkDiv = document.querySelectorAll(".mr-1")[0];
 const pztfUyari = document.querySelectorAll(".toast-body")[0];
 const ngtfUyari = document.querySelectorAll(".toast-body")[1];
 
@@ -89,13 +90,15 @@ function addTodo(e){
     const inputText = input.value.trim();
     if(inputText==null || inputText==""){
         document.querySelector(".toast-body")
-        alert("Lütfen bir değer giriniz");
+        //Boş giriş yapılması durumunda
+        showAlert("warning","Lütfen bir değer giriniz");
     }else{
         //Ara yüze ekleme
         addTodoUI(inputText);
         //Storage ekleme
         addTodoToStorage(inputText);
-
+        //Bilgilendirme uyarısı
+        showAlert("success","Listeye eklendi.");
     }
     
     
@@ -139,4 +142,29 @@ function chekTodoFromStorage(){
     }else{
         todos = JSON.parse(localStorage.getItem("todos"));
     }
+}
+
+//todo Bilgilendirme uyarısı için bir fonksiyon yazcaz
+function showAlert(type,message){
+    /* Bunu bootstrap tan aldık ve kopya çekebiliriz ama ben aşağıda başka bi taneden kopyalamaya çalışacam
+    <div class="alert alert-warning" role="alert">
+  A simple warning alert—check it out!
+ </div> 
+ 
+ <div class="toast-body">Listeye eklendi.</div>
+ */
+    const div = document.createElement("div");
+    div.className = "toast-body"+ type;
+    div.textContent = message;
+
+    ilkDiv.appendChild(div);
+
+    //* Bu uyarının bir kaç saniye sonra silinmesini istiyecez
+    
+    setTimeout(function(){
+        div.remove();
+    },1500);
+
+
+
 }
