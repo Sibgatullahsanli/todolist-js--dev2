@@ -82,8 +82,56 @@ runEvents();
 
 //todo EKLE tıklanılmasını yakalamak için fonksiyon
 function runEvents(){
+    //todo EKLE tıklanılmasını yakadıktan sonra gideceği fonksiyonu belirledik
     ekle.addEventListener("click",addTodo);
+    //todo listelere eklemeler yapıldıktan sonra sayfa da sabit kalması için talimat girdik
+    document.addEventListener("DOMContentLoaded",pageLoaded);
+    //todo lide ki çarpı ikonu tıklandığında arayüzden silmesi için fonksiyon 
+    ul.addEventListener("click",removeTodoToUI);
 }
+
+//todo listelere eklemeler yapıldıktan sonra sayfa da sabit kalması için 
+function pageLoaded(){
+    //* önceden hazırladığımız todos a değerlerin atandığı fonksiyonu çağırdık.
+    chekTodoFromStorage();
+    todos.forEach(function(todo){
+        // console.log(todo);  // deneme yaptık consola yansıtarak
+        addTodoUI(todo);    //todo addTodoUI bu fonksiyonla ara yüze ekleme yaptırıyorduk şimdide kalıcı olmasını sağlamış olduk.
+    });
+
+}
+
+//todo ara yüzden li elementlerini silmesi için olan fonksiyon
+function removeTodoToUI(e){
+    // console.log(e.target);
+
+    if(e.target.className==="fa fa-remove"){
+        // console.log("çarpıya basıldı");
+        //? çarpıya basılınca i etiketini yakaladık şimdi onun üstü a onunda üstü li yi yakalayıp todo değişkenine atadık
+        // Ekrandan silmek
+        const todo = e.target.parentElement.parentElement;
+        todo.remove();
+        //Storage den silmek  bu removeTodoStorage fonksiyonu kullanmasını söyledik. 
+        removeTodoStorage (todo.textContent);
+        // silince uyarı ver dedik
+        showAlert("success","Listeden başarıyla silindi.");
+    }
+
+}
+
+//todo Storage den silmesi için fonksiyon
+function removeTodoStorage(removTodo){
+    chekTodoFromStorage();
+    todos.forEach(function(todo,index){
+        if(removTodo===todo){
+            todos.splice(index,1);
+        }
+    });
+    localStorage.setItem("todos",JSON.stringify(todos));
+}
+
+
+
 
 //todo EKLE tıklanılmasında uygulıyacağı fonksiyon
 function addTodo(e){
@@ -149,12 +197,13 @@ function showAlert(type,message){
     /* Bunu bootstrap tan aldık ve kopya çekebiliriz ama ben aşağıda başka bi taneden kopyalamaya çalışacam
     <div class="alert alert-warning" role="alert">
   A simple warning alert—check it out!
+  </div>
  </div> 
- 
- <div class="toast-body">Listeye eklendi.</div>
- */
+  </div>
+  */
     const div = document.createElement("div");
-    div.className = "toast-body"+ type;
+    // div.className = "alert alert-"+ type;
+    div.className = `alert alert-${type}`;
     div.textContent = message;
 
     ilkDiv.appendChild(div);
@@ -163,7 +212,7 @@ function showAlert(type,message){
     
     setTimeout(function(){
         div.remove();
-    },1500);
+    },3500);
 
 
 
